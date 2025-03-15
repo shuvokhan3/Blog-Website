@@ -2,17 +2,50 @@
 include_once 'include/header.php';
 include_once 'include/sidebar.php';
 
+
+//include postAdd file that help to add data on database
+include_once '../classes/postAdd.php';
+
+
+//create object on this class
+$post = new postAdd();
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    try{
+
+        $post_add = $post->AddPost($_POST, $_FILES);
+
+    }catch (error $ex){
+        echo $ex;
+    }
+}
+
 ?>
 
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
+
+                <span>
+                    <?php
+                    if (isset($post_add)) {
+                        ?>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                   <?= $post_add ?>
+                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                         </div>
+                        <?php
+                    }
+                    ?>
+
+                </span>
+
                 <div class="col-xl-11">
                     <div class="card shadow ">
                         <h4 class="card-header">Add Post</h4>
                         <div class="card-body">
-                            <form method="post" action="categoryAdd.php">
+                            <form method="post" enctype="multipart/form-data" action="">
 
                                 <!--Post title-->
                                 <div class="mb-3">
@@ -34,8 +67,20 @@ include_once 'include/sidebar.php';
 
                                 <!--Image File Upload-->
                                 <div class="mb-3">
-                                    <label class="form-label">Image Upload</label>
-                                    <input type="file" name="imageOne" class="form-control" required placeholder="Upload Image"/>
+                                    <label class="form-label">Image One</label>
+                                    <input type="file" name="imageOne" class="form-control" required placeholder="Image One"/>
+                                </div>
+
+                                <!--Image File Upload-->
+                                <div class="mb-3">
+                                    <label class="form-label">Image Two</label>
+                                    <input type="file" name="imageTwo" class="form-control" required placeholder="Image Two"/>
+                                </div>
+
+                                <!--Image File Upload-->
+                                <div class="mb-3">
+                                    <label class="form-label">Image Three</label>
+                                    <input type="file" name="imageThree" class="form-control" required placeholder="Image Three"/>
                                 </div>
 
                                 <!--Post description-->
@@ -58,7 +103,7 @@ include_once 'include/sidebar.php';
                                     <div >
                                         <select class="form-select" name="visibility">
                                             <option value="1">Slider</option>
-                                            <option value="0">Post</option>
+                                            <option value="1">Post</option>
                                         </select>
                                     </div>
                                 </div>
