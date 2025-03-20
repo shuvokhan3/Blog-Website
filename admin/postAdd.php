@@ -2,18 +2,16 @@
 include_once 'include/header.php';
 include_once 'include/sidebar.php';
 
-
 //include postAdd file that help to add data on database
 include_once '../classes/postAdd.php';
-
 
 //create object on this class
 $post = new postAdd();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     try{
-
         $post_add = $post->AddPost($_POST, $_FILES);
+        unset($_POST);
 
     }catch (error $ex){
         echo $ex;
@@ -45,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div class="card shadow ">
                         <h4 class="card-header">Add Post</h4>
                         <div class="card-body">
-                            <form method="post" enctype="multipart/form-data" action="">
+                            <form method="post" enctype="multipart/form-data" action="action.php">
 
                                 <!--Post title-->
                                 <div class="mb-3">
@@ -59,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                     <div >
                                         <select class="form-select" name="categoryId">
                                             <option>Select</option>
-                                            <option>Large select</option>
+                                            <option>1</option>
                                             <option>Small select</option>
                                         </select>
                                     </div>

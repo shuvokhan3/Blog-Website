@@ -34,8 +34,11 @@ class postAdd{
         $file_tmp = $file['imageOne']['tmp_name'];
         $div = explode('.', $fileName);
         $file_ext = strtolower(end($div));
-        $unique_image = substr(md5(time()), 0, 10).'.'.$file_ext;
+        //$unique_image = substr(md5(time()), 0, 10).'.'.$file_ext;
+        //each every time uniqid() method generate a unique file name of every image
+        $unique_image = uniqid() . '.' . $file_ext;
         $upload_image = "uploads/".$unique_image;
+
 
         //image Two
         //image permition
@@ -45,8 +48,10 @@ class postAdd{
         $file_tmp_two = $file['imageTwo']['tmp_name'];
         $div_two = explode('.', $fileName_two);
         $file_ext_two = strtolower(end($div_two));
-        $unique_image_two = substr(md5(time()), 0, 10).'.'.$file_ext_two;
+        //$unique_image_two = substr(md5(time()), 0, 10).'.'.$file_ext_two;
+        $unique_image_two = uniqid() . '.' . $file_ext_two;
         $upload_image_two = "uploads/".$unique_image_two;
+
 
 
         //image Three
@@ -57,8 +62,10 @@ class postAdd{
         $file_tmp_three = $file['imageThree']['tmp_name'];
         $div_three = explode('.', $fileName_three);
         $file_ext_three = strtolower(end($div_three));
-        $unique_image_three = substr(md5(time()), 0, 10).'.'.$file_ext_three;
+        //$unique_image_three = substr(md5(time()), 0, 10).'.'.$file_ext_three;
+        $unique_image_three = uniqid() . '.' . $file_ext_three;
         $upload_image_three = "uploads/".$unique_image_three;
+
 
         //validation
         if(empty($title) || empty($categoryId) || empty($description) || empty($visibility) || empty($tag)){
@@ -77,8 +84,25 @@ class postAdd{
             return "You Can Upload Only : - ". implode(',', $permited_three);
         }else{
 
-            $insertQuery = "INSERT INTO posts(title, categorysId, image1, image2,image3,description,post_visibility,tag) VALUES ('$title', '$categoryId', '$unique_image', '$unique_image_two', '$unique_image_three', '$description', '$visibility', '$tag')";
-            $this->db->insert($insertQuery);
+            if(!empty($file['imageOne']['name'])){
+                move_uploaded_file($file_tmp, $upload_image);
+            }
+            if(!empty($file['imageTwo']['name'])){
+                move_uploaded_file($file_tmp_two, $upload_image_two);
+            }
+            if(!empty($file['imageThree']['name'])){
+                move_uploaded_file($file_tmp_three, $upload_image_three);
+            }
+
+            $insertQuery = "INSERT INTO posts(title, categoryId, image1, image2,image3,description,post_visibility,tag) VALUES ('$title', '$categoryId', '$unique_image', '$unique_image_two', '$unique_image_three', '$description', '$visibility', '$tag')";
+            $insertStatus = $this->db->insert($insertQuery);
+
+            if($insertStatus){
+                return  "Post Created Successfully";
+            }else{
+                return "Error Creating New Post";
+            }
+
 
         }
     }
